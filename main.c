@@ -20,7 +20,6 @@ int	minishell(t_cmds *cmd_lst)
 
 	get_signals();
 	// g_exit_status = 0;
-	
 	input = user_input();
 	if (!input)
 	{
@@ -136,24 +135,46 @@ int	run_commands(t_cmds **cmd_lst)
 	{
 		tmp_log_op = (*cmd_lst)->log_op;
 		(*cmd_lst) = (*cmd_lst)->next;
-		(*cmd_lst)->prev = 0;
+		// (*cmd_lst)->prev = 0;
 		return tmp_log_op;
 	}
 	return (0);
 }
-
-void	run_cmds_loop(t_cmds *cmd_lst)
+//echo hi && echo heel || ls  && ls -a || ls -ls && echo dealer
+void	run_cmds_loop(t_cmds *cmd_lst) // problem: echo hi && echo heel || ls  && ls -a  // echo hi && echo heel || ls  && ls -a && echo hi
 {
-	int i = 0; 
+	int i; 
+	int	tmp_op;
 
 	while (cmd_lst) 
 	{
+		cmd_lst->prev = 0;
 		i = run_commands(&cmd_lst);
+
 		if ((i == AND && g_exit_status != 0) || (i == OR && g_exit_status == 0))
 		{
-			while (cmd_lst && (cmd_lst->log_op == i || cmd_lst->log_op == PIPE || cmd_lst->log_op == -1))
-				cmd_lst = cmd_lst->next;
+			do
+			{
+				tmp_op = cmd_lst->log_op;
+				
+				if (cmd_lst)
+					cmd_lst = cmd_lst->next;
+				
+				if (!cmd_lst || (tmp_op == AND && g_exit_status == 0) 
+				|| (tmp_op == OR && g_exit_status != 0)
+				|| (cmd_lst->log_op == -1 && tmp_op != i))
+					break;
+			} while (cmd_lst && (cmd_lst->log_op == i || cmd_lst->log_op == PIPE
+				|| cmd_lst->log_op == -1));
+			
 		}
 		g_exit_status = 0;	
 	}
 }
+
+// printf("logop: %i ++ code ex: %i +++ tmp: %i ++ i: %i\n", cmd_lst->log_op, g_exit_status, tmp_op, i);
+// while (cmd_lst && (cmd_lst->log_op == i || cmd_lst->log_op == PIPE || cmd_lst->log_op == -1))
+// {
+// 	printf("is in while loop:%i\n", cmd_lst->log_op);
+// 	cmd_lst = cmd_lst->next;
+// }
