@@ -32,8 +32,13 @@ int	cmd_split_loop(t_tokens **token_lst, t_cmds *cmd, char **envp, int i)
 {
 	t_tokens	*tmp;
 
-	while (*token_lst != NULL && (*token_lst)->type != PIPE && (*token_lst)->type != AND && (*token_lst)->type != OR)  //AND, OR
+	while (*token_lst != NULL && (*token_lst)->type != PIPE && (*token_lst)->type != AND && (*token_lst)->type != OR
+		&& (*token_lst)->token)  //AND, OR
 	{
+		
+		cmd->para_num = (*token_lst)->parenthesis_num;
+		// printf("paraaaaaa num: %i token: %s\n", cmd->para_num, (*token_lst)->token);
+		
 		if (cmd->infile != -1 || (*token_lst)->type == DOC
 			|| (*token_lst)->type == EQUAL)
 		{

@@ -56,7 +56,7 @@ char	*itw_loop(char *input, char *tkn, int *j, char **envp)
 	return (tkn);
 }
 
-t_tokens	*innit_token_word(char *input, int *i, char **envp)
+t_tokens	*init_token_word(char *input, int *i, char **envp, int para_num)
 {
 	int			j;
 	char		*tkn;
@@ -74,10 +74,13 @@ t_tokens	*innit_token_word(char *input, int *i, char **envp)
 	token = innit_token(tkn, i, WORD);
 	if (ft_strchr(tkn, '=') && valid_input(tkn))
 		token->type = EQUAL;
+	
+	token->parenthesis_num = para_num;
+	
 	return (token);
 }
 
-t_tokens	*innit_redir(char *input, int *i, int type, char **envp)
+t_tokens	*init_redir(char *input, int *i, int type, char **envp, int para_num)
 {
 	t_tokens	*token;
 	int			j;
@@ -88,7 +91,7 @@ t_tokens	*innit_redir(char *input, int *i, int type, char **envp)
 	else
 		j += 2;
 	*i = space_len(input, &j);
-	token = innit_token_word(input, &j, envp);
+	token = init_token_word(input, &j, envp, para_num);
 	token->type = type;
 	*i = j;
 	return (token);

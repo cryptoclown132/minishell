@@ -19,8 +19,26 @@ t_tokens	*lexer(t_tokens *token_lst, char *input, char **envp)
 
 	token_lst = NULL;
 	i = -1;
+
+
+
+	int		para_num = 0;
+	bool	open_para = false;
 	while (input[++i])
 	{
+		if (input[i] == '(')
+		{
+			i++;
+			open_para = true;
+		}
+		else if (input[i] == ')')
+		{
+			printf("para closed\n");
+			para_num++;
+			i++;
+			open_para = false;
+		}
+
 		if (input[i] == '|' && input[i + 1] == '|') //i++
 			token = innit_token(ft_strdup("||"), &i, OR);
 		else if (input[i] == '|')
@@ -28,15 +46,21 @@ t_tokens	*lexer(t_tokens *token_lst, char *input, char **envp)
 		else if (input[i] == '&' && input[i + 1] == '&') // i++
 			token = innit_token(ft_strdup("&&"), &i, AND);
 		else if (input[i] == '<' && input[i + 1] != '<')
-			token = innit_redir(input, &i, IN, envp);
+			token = init_redir(input, &i, IN, envp, para_num);
 		else if (input[i] == '<' && input[i + 1] == '<')
-			token = innit_redir(input, &i, DOC, envp);
+			token = init_redir(input, &i, DOC, envp, para_num);
 		else if (input[i] == '>' && input[i + 1] != '>')
-			token = innit_redir(input, &i, OUT, envp);
+			token = init_redir(input, &i, OUT, envp, para_num);
 		else if (input[i] == '>' && input[i + 1] == '>')
-			token = innit_redir(input, &i, APP, envp);
+			token = init_redir(input, &i, APP, envp, para_num);
 		else if (input[i] != ' ')
-			token = innit_token_word(input, &i, envp);
+		{
+			// printf("token para num: %i \n", para_num);
+			token = init_token_word(input, &i, envp, para_num); // echo )
+
+			if (open_para == false)
+				para_num++;
+		}
 		if (input[i] != ' ')
 			add_token(&token_lst, token);
 	}

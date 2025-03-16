@@ -71,6 +71,11 @@ typedef struct s_tokens
 {
 	enum e_TYPE		type;
 	char			*token;
+
+
+	int				parenthesis_num;
+
+
 	struct s_tokens	*next;
 }t_tokens;
 
@@ -90,6 +95,7 @@ typedef struct s_cmds
 
 
 	int				log_op;
+	int				para_num;
 }t_cmds;
 
 /* for norm */
@@ -158,9 +164,12 @@ t_tokens	*lexer(t_tokens *token_lst, char *input, char **envp);
 
 /* token_innit.c */
 t_tokens	*innit_token(char *input, int *i, int token_type);
-t_tokens	*innit_token_word(char *input, int *i, char **envp);
+// t_tokens	*innit_token_word(char *input, int *i, char **envp);
+t_tokens	*init_token_word(char *input, int *i, char **envp, int para_num);
 void		add_token(t_tokens **token_lst, t_tokens *token);
-t_tokens	*innit_redir(char *input, int *i, int type, char **envp);
+t_tokens	*init_redir(char *input, int *i, int type, char **envp, int para_num);
+
+// t_tokens	*innit_redir(char *input, int *i, int type, char **envp);
 
 /* expander.c */
 char		*expander(char *token, char **envp);
@@ -245,7 +254,8 @@ int			set_exit_int(char *str, int err);
 /* execution */
 /**********/
 
-int			run_commands(t_cmds **cmd_lst);
+int	run_commands(t_cmds **cmd_lst, int *prev_par_num);
+// int			run_commands(t_cmds **cmd_lst);
 // void			run_commands(t_cmds *cmd_lst);
 int			pipe_builtin(t_cmds *cmd_lst, int *old_fds, int *new_fds, int flag);
 void		execute_redirect(int pid, int *old_fds,

@@ -99,7 +99,7 @@ int	fork_failed(int pid)
 	return (0);
 }
 
-int	run_commands(t_cmds **cmd_lst)
+int	run_commands(t_cmds **cmd_lst, int *prev_par_num)
 {
 	t_run_commands	r;
 	int				tmp_log_op;
@@ -134,41 +134,55 @@ int	run_commands(t_cmds **cmd_lst)
 	if (*cmd_lst && ((*cmd_lst)->log_op == AND || (*cmd_lst)->log_op == OR))
 	{
 		tmp_log_op = (*cmd_lst)->log_op;
+		*prev_par_num = (*cmd_lst)->para_num;  // ?????
 		(*cmd_lst) = (*cmd_lst)->next;
 		// (*cmd_lst)->prev = 0;
 		return tmp_log_op;
 	}
 	return (0);
 }
-//echo hi && echo heel || ls  && ls -a || ls -ls && echo dealer
-void	run_cmds_loop(t_cmds *cmd_lst) // problem: echo hi && echo heel || ls  && ls -a  // echo hi && echo heel || ls  && ls -a && echo hi
+
+//(echo hi && echo hello ) || (echo wie && echo falco )
+// echo hi && echo hello  || echo wie || echo falco || echo rotwein && echo reitz
+void	run_cmds_loop(t_cmds *cmd_lst)
 {
 	int i; 
 	int	tmp_op;
 
+	int prev_par_num;
+
 	while (cmd_lst) 
 	{
 		cmd_lst->prev = 0;
-		i = run_commands(&cmd_lst);
-
+		i = run_commands(&cmd_lst, &prev_par_num);
 		if ((i == AND && g_exit_status != 0) || (i == OR && g_exit_status == 0))
 		{
 			do
 			{
 				tmp_op = cmd_lst->log_op;
+					
+				prev_par_num = cmd_lst->para_num;
 				
+
+				// printf("prev para: %i ### now para: %i \n", prev_par_num, cmd_lst->para_num);
 				if (cmd_lst)
 					cmd_lst = cmd_lst->next;
-				
-				if (!cmd_lst || (tmp_op == AND && g_exit_status == 0) 
-				|| (tmp_op == OR && g_exit_status != 0)
-				|| (cmd_lst->log_op == -1 && tmp_op != i))
+				// printf("***prev para: %i ### now para: %i ## tmpop: %i +++ logop: %i\n", prev_par_num, cmd_lst->para_num, tmp_op, cmd_lst->log_op);
+
+					
+
+
+				if (!cmd_lst || (tmp_op == AND && g_exit_status == 0 && prev_par_num != cmd_lst->para_num) 
+					|| (tmp_op == OR && g_exit_status != 0 && prev_par_num != cmd_lst->para_num)
+					|| (cmd_lst->log_op == -1 && tmp_op != i && prev_par_num != cmd_lst->para_num))
 					break;
-			} while (cmd_lst && (cmd_lst->log_op == i || cmd_lst->log_op == PIPE
-				|| cmd_lst->log_op == -1));
+			}  while (cmd_lst && (tmp_op == i || cmd_lst->log_op == PIPE
+				|| cmd_lst->log_op == -1 || prev_par_num == cmd_lst->para_num));
+			//  while (cmd_lst && (cmd_lst->log_op == i || cmd_lst->log_op == PIPE
+			// 	|| cmd_lst->log_op == -1 || prev_par_num == cmd_lst->para_num));
 			
 		}
-		g_exit_status = 0;	
+		g_exit_status = 0;
 	}
 }
 
@@ -178,3 +192,11 @@ void	run_cmds_loop(t_cmds *cmd_lst) // problem: echo hi && echo heel || ls  && l
 // 	printf("is in while loop:%i\n", cmd_lst->log_op);
 // 	cmd_lst = cmd_lst->next;
 // }
+
+
+// int prev_par_num;
+
+// if (cmd_lst->parenthesis_num != prev_par_num)
+// 	prev_par_num = cmd_lst->parenthesis_num;
+// 	while (cmd_lst && prev_par_num == cmd_lst->parenthesis_num)
+// 		cmd_lst = cmd_lst->next;

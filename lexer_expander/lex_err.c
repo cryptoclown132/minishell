@@ -40,7 +40,7 @@ int	check_unclosed_quotes(char *input)
 				j++;
 			if (!input[j])
 			{
-				lex_error("uclosed quotes");
+				lex_error("unclosed quotes");
 				return (0);
 			}
 			i = j;
@@ -123,7 +123,7 @@ int	check_pipe(char *input)
 	return (1);
 }
 
-int	lex_error_check(char *input) //& error
+int	lex_error_check(char *input)
 {
 	if (!check_spaces(input))
 		return (0);
@@ -135,3 +135,4 @@ int	lex_error_check(char *input) //& error
 		return (0);
 	return (1);
 }
+// check unclosed parenthesis
