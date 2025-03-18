@@ -112,7 +112,7 @@ int	run_commands(t_cmds **cmd_lst, int *prev_par_num)
 		{
 			if (!pipe_builtin(*cmd_lst, r.old_fds, r.new_fds, 1)
 			|| !(*cmd_lst)->next)
-			return 0;
+				return 0;
 			*cmd_lst = (*cmd_lst)->next;
 			continue ;
 		}
@@ -127,6 +127,7 @@ int	run_commands(t_cmds **cmd_lst, int *prev_par_num)
 
 		if (*cmd_lst && ((*cmd_lst)->log_op == AND || (*cmd_lst)->log_op == OR))
 			break;
+
 		(*cmd_lst) = (*cmd_lst)->next;
 	}
 	wait_for_children(r.pid, &r.wait_status, r.err);
@@ -144,15 +145,17 @@ int	run_commands(t_cmds **cmd_lst, int *prev_par_num)
 
 //(echo hi && echo hello ) || (echo wie && echo falco )
 // echo hi && echo hello  || echo wie || echo falco || echo rotwein && echo reitz
+//  mkdir test && cd test
 void	run_cmds_loop(t_cmds *cmd_lst)
 {
 	int i; 
 	int	tmp_op;
 
 	int prev_par_num;
-
+	
 	while (cmd_lst) 
 	{
+		
 		cmd_lst->prev = 0;
 		i = run_commands(&cmd_lst, &prev_par_num);
 		if ((i == AND && g_exit_status != 0) || (i == OR && g_exit_status == 0))
