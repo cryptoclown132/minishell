@@ -53,6 +53,7 @@ char	*itw_loop(char *input, char *tkn, int *j, char **envp)
 		t.tmp_str = expander(t.tmp_str, envp);
 	tkn = free_both_strjoin(tkn, t.tmp_str);
 	*j = t.k + 1;
+
 	return (tkn);
 }
 
@@ -65,7 +66,8 @@ t_tokens	*init_token_word(char *input, int *i, char **envp, int para_num)
 	j = *i;
 	tkn = NULL;
 	while (input[j] && input[j] != ' ' && input[j] != '|'
-		&& input[j] != '<' && input[j] != '>' && input[j] != '&')
+		&& input[j] != '<' && input[j] != '>' && input[j] != '&'
+		&& input[j] != '(' && input[j] != ')')
 	{
 		tkn = itw_loop(input, tkn, &j, envp);
 		*i = j;
@@ -76,7 +78,6 @@ t_tokens	*init_token_word(char *input, int *i, char **envp, int para_num)
 		token->type = EQUAL;
 	
 	token->parenthesis_num = para_num;
-	
 	return (token);
 }
 

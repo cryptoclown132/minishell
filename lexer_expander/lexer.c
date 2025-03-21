@@ -33,7 +33,6 @@ t_tokens	*lexer(t_tokens *token_lst, char *input, char **envp)
 		}
 		else if (input[i] == ')')
 		{
-			printf("para closed\n");
 			para_num++;
 			i++;
 			open_para = false;
@@ -55,9 +54,7 @@ t_tokens	*lexer(t_tokens *token_lst, char *input, char **envp)
 			token = init_redir(input, &i, APP, envp, para_num);
 		else if (input[i] != ' ')
 		{
-			// printf("token para num: %i \n", para_num);
 			token = init_token_word(input, &i, envp, para_num); // echo )
-
 			if (open_para == false)
 				para_num++;
 		}

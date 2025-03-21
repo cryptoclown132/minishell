@@ -46,14 +46,14 @@ int	is_builtin(t_cmds *cmd_lst)
 	}
 	if (!ft_strncmp(cmd_lst->cmd_split[0], "cd", 3))
 	{
-		if (cmd_lst->next)
+		if (cmd_lst->next && cmd_lst->log_op != AND && cmd_lst->log_op != OR)
 			return (1);
 		cd(cmd_lst);
 		return (0); // changes here
 	}
 	else if (!ft_strncmp(cmd_lst->cmd_split[0], "export", 7))
 	{
-		if (cmd_lst->next)
+		if (cmd_lst->next && cmd_lst->log_op != AND && cmd_lst->log_op != OR)
 			return (1);
 		builtin_export(cmd_lst);
 		return (0); // changes here

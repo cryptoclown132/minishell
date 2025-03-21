@@ -111,8 +111,10 @@ int	run_commands(t_cmds **cmd_lst, int *prev_par_num)
 		if ((*cmd_lst)->cmd_split && is_builtin((*cmd_lst))) // AND
 		{
 			if (!pipe_builtin(*cmd_lst, r.old_fds, r.new_fds, 1)
-			|| !(*cmd_lst)->next)
+				|| !(*cmd_lst)->next)
 				return 0;
+			if ((*cmd_lst)->log_op == AND || (*cmd_lst)->log_op == OR)
+				break ;
 			*cmd_lst = (*cmd_lst)->next;
 			continue ;
 		}
@@ -142,10 +144,12 @@ int	run_commands(t_cmds **cmd_lst, int *prev_par_num)
 	}
 	return (0);
 }
+// (ls && echo "Success") | grep "Success"
+// (ls /etc && ls /not_exist) > output.txt 2>&1
+// (mkdir test && cd test && touch file.txt) || echo "Setup failed"
+// mkdir test && cd test && touch file.txt
+// (echo he && )
 
-//(echo hi && echo hello ) || (echo wie && echo falco )
-// echo hi && echo hello  || echo wie || echo falco || echo rotwein && echo reitz
-//  mkdir test && cd test
 void	run_cmds_loop(t_cmds *cmd_lst)
 {
 	int i; 
@@ -175,10 +179,11 @@ void	run_cmds_loop(t_cmds *cmd_lst)
 					
 
 
-				if (!cmd_lst || (tmp_op == AND && g_exit_status == 0 && prev_par_num != cmd_lst->para_num) 
+				if (!cmd_lst || (tmp_op == AND && g_exit_status == 0 && prev_par_num != cmd_lst->para_num)
 					|| (tmp_op == OR && g_exit_status != 0 && prev_par_num != cmd_lst->para_num)
 					|| (cmd_lst->log_op == -1 && tmp_op != i && prev_par_num != cmd_lst->para_num))
 					break;
+				
 			}  while (cmd_lst && (tmp_op == i || cmd_lst->log_op == PIPE
 				|| cmd_lst->log_op == -1 || prev_par_num == cmd_lst->para_num));
 			//  while (cmd_lst && (cmd_lst->log_op == i || cmd_lst->log_op == PIPE
