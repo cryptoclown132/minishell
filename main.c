@@ -147,8 +147,6 @@ int	run_commands(t_cmds **cmd_lst, int *prev_par_num)
 // (ls && echo "Success") | grep "Success"
 // (ls /etc && ls /not_exist) > output.txt 2>&1
 // (mkdir test && cd test && touch file.txt) || echo "Setup failed"
-// mkdir test && cd test && touch file.txt
-// (echo he && )
 
 void	run_cmds_loop(t_cmds *cmd_lst)
 {
@@ -193,18 +191,3 @@ void	run_cmds_loop(t_cmds *cmd_lst)
 		g_exit_status = 0;
 	}
 }
-
-// printf("logop: %i ++ code ex: %i +++ tmp: %i ++ i: %i\n", cmd_lst->log_op, g_exit_status, tmp_op, i);
-// while (cmd_lst && (cmd_lst->log_op == i || cmd_lst->log_op == PIPE || cmd_lst->log_op == -1))
-// {
-// 	printf("is in while loop:%i\n", cmd_lst->log_op);
-// 	cmd_lst = cmd_lst->next;
-// }
-
-
-// int prev_par_num;
-
-// if (cmd_lst->parenthesis_num != prev_par_num)
-// 	prev_par_num = cmd_lst->parenthesis_num;
-// 	while (cmd_lst && prev_par_num == cmd_lst->parenthesis_num)
-// 		cmd_lst = cmd_lst->next;

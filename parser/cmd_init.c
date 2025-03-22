@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cmd_innit.c                                        :+:      :+:    :+:   */
+/*   cmd_init.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jkroger <jkroger@student.42wolfsburg.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -37,7 +37,6 @@ int	cmd_split_loop(t_tokens **token_lst, t_cmds *cmd, char **envp, int i)
 	{
 		
 		cmd->para_num = (*token_lst)->parenthesis_num;
-		// printf("paraaaaaa num: %i token: %s\n", cmd->para_num, (*token_lst)->token);
 		
 		if (cmd->infile != -1 || (*token_lst)->type == DOC
 			|| (*token_lst)->type == EQUAL)
@@ -102,7 +101,7 @@ char	**new_cmd_split(char **cmd_split, int i, int j)
 	return (new_cmd_split);
 }
 
-t_cmds	*innit_cmd(t_cmds *cmd, char **envp, t_tokens **token_lst, int prev)
+t_cmds	*init_cmd(t_cmds *cmd, char **envp, t_tokens **token_lst, int prev)
 {
 	int	i;
 	int	j;

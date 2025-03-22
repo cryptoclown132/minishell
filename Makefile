@@ -18,17 +18,19 @@ LDFLAGS = -L/opt/homebrew/opt/readline/lib -lreadline
 all: $(NAME)
 
 $(NAME) : $(OBJ) $(HEADER)
-	(cd libft; make)
+	$(MAKE) -C libft
 	$(CC) $(CFLAGS) $(OBJ) $(LDFLAGS) $(LIBFT)  -o $(NAME) 
 
 clean:
-	(cd libft; make clean)
+	$(MAKE) -C libft clean
 	rm -f $(OBJ)
 
 fclean: clean
-	(cd libft; make fclean)
+	$(MAKE) -C libft fclean
 	rm -f $(NAME)
 
 re: fclean all
 
-.PHONY: all clean fclean re
+bonus: all
+
+.PHONY: all clean fclean re bonus

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkroger <jkroger@student.42wolfsburg.de    +#+  +:+       +#+        */
+/*   By: julienkroger <julienkroger@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 14:34:39 by jkroger           #+#    #+#             */
-/*   Updated: 2023/03/21 00:11:01 by jkroger          ###   ########.fr       */
+/*   Updated: 2025/03/22 15:53:07 by julienkroge      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,12 +128,12 @@ typedef struct s_here_loop
 	char	*tmp;
 }t_here_loop;
 
-typedef struct s_innit_cmd_struct
+typedef struct s_init_cmd_struct
 {
 	t_tokens	*tmp_t;
 	t_cmds		*cmd;
 	int			prev;
-}t_innit_cmd_struct;
+}t_init_cmd_struct;
 
 typedef struct s_run_commands
 {
@@ -162,8 +162,8 @@ int			check_redir(char *input);
 /* lexer.c */
 t_tokens	*lexer(t_tokens *token_lst, char *input, char **envp);
 
-/* token_innit.c */
-t_tokens	*innit_token(char *input, int *i, int token_type);
+/* token_init.c */
+t_tokens	*init_token(char *input, int *i, int token_type);
 // t_tokens	*innit_token_word(char *input, int *i, char **envp);
 t_tokens	*init_token_word(char *input, int *i, char **envp, int para_num);
 void		add_token(t_tokens **token_lst, t_tokens *token);
@@ -188,7 +188,7 @@ t_cmds		*parse(t_cmds *cmd_lst, char **input, char **envp);
 // t_cmds		*parse(t_cmds *cmd_lst, char *input, char **envp);
 
 /* parsing.c */
-int			innit_cmd_struct(t_tokens **token_lst,
+int			init_cmd_struct(t_tokens **token_lst,
 				t_cmds **cmd_lst, char **envp);
 void		free_cmd(t_cmds *cmd, int i);
 void		reset_cmd_struct(t_cmds *cmd_lst);
@@ -205,8 +205,8 @@ void		redir_handler(t_tokens *token, t_cmds *cmd, char **env);
 /* heredoc_utils.c */
 void		here_doc_loop(t_tokens *token, int fd, char **env);
 
-/* cmd_innit.c */
-t_cmds		*innit_cmd(t_cmds *cmd_lst, char **envp,
+/* cmd_init.c */
+t_cmds		*init_cmd(t_cmds *cmd_lst, char **envp,
 				t_tokens **token_lst, int prev);
 
 /* env_list.c */

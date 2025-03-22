@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   token_innit.c                                      :+:      :+:    :+:   */
+/*   token_init.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jkroger <jkroger@student.42wolfsburg.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,7 +12,7 @@
 
 #include "../minishell.h"
 
-t_tokens	*innit_token(char *input, int *i, int token_type)
+t_tokens	*init_token(char *input, int *i, int token_type)
 {
 	t_tokens	*token;
 
@@ -44,7 +44,8 @@ char	*itw_loop(char *input, char *tkn, int *j, char **envp)
 	{
 		while (input[t.k] && input[t.k] != '\'' && input[t.k] != '"'
 			&& input[t.k] != '\n' && input[t.k] != '|' && input[t.k] != '<'
-			&& input[t.k] != '>' && input[t.k] != ' ' && input[t.k] != '&')
+			&& input[t.k] != '>' && input[t.k] != ' ' && input[t.k] != '&'
+			&& input[t.k] != '(' && input[t.k] != ')')
 			t.k++;
 		t.tmp_str = ft_substr(input, *j, t.k - *j);
 		t.k--;
@@ -73,7 +74,7 @@ t_tokens	*init_token_word(char *input, int *i, char **envp, int para_num)
 		*i = j;
 	}
 	*i = j - 1;
-	token = innit_token(tkn, i, WORD);
+	token = init_token(tkn, i, WORD);
 	if (ft_strchr(tkn, '=') && valid_input(tkn))
 		token->type = EQUAL;
 	

@@ -12,6 +12,16 @@
 
 #include "../minishell.h"
 
+bool	which_parenthesis(char parenthesis, int *i, int *para_num)
+{
+	*i += 1;
+	if (parenthesis == '(')
+		return true;
+	*para_num += 1;
+	return false;
+
+}
+
 t_tokens	*lexer(t_tokens *token_lst, char *input, char **envp)
 {
 	int			i;
@@ -20,30 +30,18 @@ t_tokens	*lexer(t_tokens *token_lst, char *input, char **envp)
 	token_lst = NULL;
 	i = -1;
 
-
-
 	int		para_num = 0;
 	bool	open_para = false;
 	while (input[++i])
 	{
-		if (input[i] == '(')
-		{
-			i++;
-			open_para = true;
-		}
-		else if (input[i] == ')')
-		{
-			para_num++;
-			i++;
-			open_para = false;
-		}
-
+		if (input[i] == '(' || input[i] == ')')
+			open_para = which_parenthesis(input[i], &i, &para_num);
 		if (input[i] == '|' && input[i + 1] == '|') //i++
-			token = innit_token(ft_strdup("||"), &i, OR);
+			token = init_token(ft_strdup("||"), &i, OR);
 		else if (input[i] == '|')
-			token = innit_token(ft_strdup("|"), &i, PIPE);
+			token = init_token(ft_strdup("|"), &i, PIPE);
 		else if (input[i] == '&' && input[i + 1] == '&') // i++
-			token = innit_token(ft_strdup("&&"), &i, AND);
+			token = init_token(ft_strdup("&&"), &i, AND);
 		else if (input[i] == '<' && input[i + 1] != '<')
 			token = init_redir(input, &i, IN, envp, para_num);
 		else if (input[i] == '<' && input[i + 1] == '<')

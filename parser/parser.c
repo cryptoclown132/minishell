@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkroger <jkroger@student.42wolfsburg.de    +#+  +:+       +#+        */
+/*   By: julienkroger <julienkroger@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/24 15:08:45 by jkroger           #+#    #+#             */
-/*   Updated: 2023/03/12 21:57:06 by jkroger          ###   ########.fr       */
+/*   Updated: 2025/03/22 15:53:45 by julienkroge      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ t_cmds	*parse(t_cmds *cmd_lst, char **input, char **envp)
 
 
     g_exit_status = 0;
-	if (innit_cmd_struct(&token_lst, &cmd_lst, envp) != 1)
+	if (init_cmd_struct(&token_lst, &cmd_lst, envp) != 1)
     cmd_lst->err = -2;	
 
 

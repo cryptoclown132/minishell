@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkroger <jkroger@student.42wolfsburg.de    +#+  +:+       +#+        */
+/*   By: julienkroger <julienkroger@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/03 11:48:59 by jkroger           #+#    #+#             */
-/*   Updated: 2023/03/20 19:37:28 by jkroger          ###   ########.fr       */
+/*   Updated: 2025/03/22 15:53:28 by julienkroge      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,18 +81,18 @@ void	add_cmd(t_cmds **cmd_lst, t_cmds *cmd)
 	}
 }
 
-int	innit_cmd_struct(t_tokens **token_lst, t_cmds **cmd_lst, char **envp)
+int	init_cmd_struct(t_tokens **token_lst, t_cmds **cmd_lst, char **envp)
 {
-	t_innit_cmd_struct	i;
+	t_init_cmd_struct	i;
 
 	i.prev = 0;
 	i.cmd = NULL;
 	while (*token_lst != NULL && g_exit_status != 130)
 	{
 		if (i.prev == 0)
-			add_cmd(&(*cmd_lst), innit_cmd(*cmd_lst, envp, token_lst, i.prev));
+			add_cmd(&(*cmd_lst), init_cmd(*cmd_lst, envp, token_lst, i.prev));
 		else
-			add_cmd(&(*cmd_lst), innit_cmd(i.cmd, envp, token_lst, i.prev));
+			add_cmd(&(*cmd_lst), init_cmd(i.cmd, envp, token_lst, i.prev));
 		if ((*token_lst) != NULL && g_exit_status != 130)
 		{
 			i.tmp_t = (*token_lst)->next;

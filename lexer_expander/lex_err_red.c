@@ -41,7 +41,8 @@ int	check_redir_in(char *input, int i)
 	}
 	i = skip_rs_in(input, i);
 	if (input[i] == '>' || input[i] == '\0'
-		|| input[i] == '<' || input[i] == '|')
+		|| input[i] == '<' || input[i] == '|'
+		|| input[i] == '(' || input[i] == ')') // &
 	{
 		if (input[i] == '\0' || input[i] == '>')
 			lex_error("newline");
@@ -49,8 +50,12 @@ int	check_redir_in(char *input, int i)
 			lex_error("<");
 		else if (input[i] == '<' && input[i + 1] == '<')
 			lex_error("<<");
-		else
+		else if (input[i] == '|')
 			lex_error("|");
+		else if (input[i] == '(')
+			lex_error("(");
+		else if (input[i] == ')')
+			lex_error(")");
 		return (0);
 	}
 	return (i);
@@ -67,7 +72,8 @@ int	check_redir_out(char *input, int i)
 	}
 	i = skip_rs_out(input, i);
 	if (input[i] == '<' || input[i] == '\0'
-		|| input[i] == '>' || input[i] == '|')
+		|| input[i] == '>' || input[i] == '|'
+		|| input[i] == '(' || input[i] == ')') // &
 	{
 		if (input[i] == '\0')
 			lex_error("newline");
@@ -77,8 +83,12 @@ int	check_redir_out(char *input, int i)
 			lex_error("<");
 		else if (input[i] == '>' && input[i + 1] == '>')
 			lex_error(">>");
-		else
+		else if (input[i] == '|')
 			lex_error("|");
+		else if (input[i] == '(')
+			lex_error("(");
+		else if (input[i] == ')')
+			lex_error(")");
 		return (0);
 	}
 	return (i);
